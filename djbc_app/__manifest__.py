@@ -23,5 +23,6 @@
         'views/exim_views.xml',
         'views/templates.xml',
     ],
+    "images": ['static/description/icon.png', 'static/images/banner.png'],
     
 }
