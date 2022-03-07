@@ -1,0 +1,15 @@
+<odoo>
+<data noupdate="0">
+
+    <record id="group_exim" model="res.groups">
+        <field name="name">Manage Exim Documents</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="group_djbc" model="res.groups">
+        <field name="name">View DJBC Report</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+</data>
+</odoo>

@@ -1,0 +1,122 @@
+<odoo>
+ 
+  <record id="djbc_view_move_line_tree_inherited" model="ir.ui.view">
+      <field name="name">djbc.view_move_line_tree_inherited</field>
+      <field name="model">stock.move.line</field>
+      <field name="inherit_id" ref="stock.view_move_line_tree"/>
+      <field name="mode">primary</field>
+      <field name="arch" type="xml">
+          <xpath expr="//tree" position="attributes">
+                <attribute name="delete">0</attribute>
+          </xpath>
+          <xpath expr="//field[@name='state']" position="replace">
+                <field name="picking_djbc_docs" string="DJBC Docs" widget="badge" />
+          </xpath>
+          <xpath expr="//field[@name='picking_djbc_docs']" position="after">
+                <field name="picking_djbc_date" string="DJBC Date" />
+          </xpath>
+          <!-- <xpath expr="//field[@name='picking_djbc_date']" position="after">
+                <field name="location_dest_usage" string="Destination Usage" />
+          </xpath>   
+          <xpath expr="//field[@name='location_dest_usage']" position="after">
+                <field name="location_source_usage" string="Source Usage" />
+          </xpath>       -->
+      </field>
+  </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="djbc_app.in_action_window">
+      <field name="name">Barang Masuk</field>
+      <field name="res_model">stock.move.line</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'create': 0}</field>
+      <field name="domain">[ ('location_dest_usage','=','internal'),('picking_djbc_docs','!=',False)]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="djbc_app.out_action_window">
+      <field name="name">Barang Keluar</field>
+      <field name="res_model">stock.move.line</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'create': 0}</field>
+      <field name="domain">[('location_dest_usage','in',['supplier','customer','inventory']),('picking_djbc_docs','!=',False)]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="djbc_app.proin_action_window">
+      <field name="name">Bahan Produksi</field>
+      <field name="res_model">stock.move.line</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'create': 0}</field>
+      <field name="domain">[('location_dest_usage','=','production')]</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="djbc_app.proout_action_window">
+      <field name="name">Hasil Produksi</field>
+      <field name="res_model">stock.move.line</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'create': 0}</field>
+      <field name="domain">[('location_source_usage','=','production')]</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="djbc_app.action_server">
+      <field name="name">djbc_app server</field>
+      <field name="model_id" ref="model_djbc_app_djbc_app"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Laporan DJBC" id="djbc_app.menu_root" groups="djbc_app.group_djbc" />
+
+    <!-- menu categories -->
+
+    <menuitem name="Mutasi Stok" id="djbc_app.menu_1" parent="djbc_app.menu_root" groups="djbc_app.group_djbc" />
+
+    <menuitem name="Laporan Pembukuan" id="djbc_app.menu_2" parent="djbc_app.menu_root" groups="djbc_app.group_djbc"/>
+
+    <!-- actions -->
+
+    <menuitem name="Barang Masuk" id="djbc_app.menu_1_list" 
+              parent="djbc_app.menu_1" 
+              action="djbc_app.in_action_window"/>
+
+    <menuitem name="Barang Keluar" id="djbc_app.menu_2_list" 
+              parent="djbc_app.menu_1" 
+              action="djbc_app.out_action_window"/>
+
+    <menuitem name="Bahan Produksi" id="djbc_app.menu_3_list" 
+              parent="djbc_app.menu_1" 
+              action="djbc_app.proin_action_window"/>
+
+    <menuitem name="Hasil Produksi" id="djbc_app.menu_4_list" 
+              parent="djbc_app.menu_1" 
+              action="djbc_app.proout_action_window"/>
+
+    <menuitem name="General Ledger" id="djbc_app.menu_2_gl" 
+              parent="djbc_app.menu_2" 
+              action="accounting_pdf_reports.action_account_general_ledger_menu"/>
+
+    <menuitem name="Journal Audits" id="djbc_app.menu_2_ja" 
+              parent="djbc_app.menu_2" 
+              action="accounting_pdf_reports.action_account_print_journal_menu"/>
+
+    <menuitem name="Balance Sheet" id="djbc_app.menu_2_bs" 
+              parent="djbc_app.menu_2" 
+              action="accounting_pdf_reports.action_account_report_bs"/>
+
+    <menuitem name="Profit Loss" id="djbc_app.menu_2_pl" 
+              parent="djbc_app.menu_2" 
+              action="accounting_pdf_reports.action_account_report_pl"/>
+
+</odoo>
